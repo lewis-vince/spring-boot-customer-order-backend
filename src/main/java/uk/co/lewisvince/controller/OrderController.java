@@ -1,7 +1,6 @@
 package uk.co.lewisvince.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +20,7 @@ public class OrderController {
         this.orderRepository = orderRepository;
     }
 
-    @RequestMapping(value = "getAll", method = RequestMethod.GET)
+    @RequestMapping(value = "getAll", method = RequestMethod.GET, produces = "application/json ")
     public List<Order> getAll() {
         return orderRepository.findAll();
     }

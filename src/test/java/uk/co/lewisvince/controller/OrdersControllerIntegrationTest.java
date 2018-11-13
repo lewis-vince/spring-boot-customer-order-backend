@@ -10,8 +10,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.lewisvince.model.Order;
+import uk.co.lewisvince.model.OrderList;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -21,6 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@TestPropertySource(locations = "classpath:application-test.properties")
 public class OrdersControllerIntegrationTest {
 
     @LocalServerPort
@@ -31,15 +34,16 @@ public class OrdersControllerIntegrationTest {
 
     @Test
     public void getOrdersReturnsOkWithCorrectOrders() {
-        ResponseEntity<List<Order>> response = restTemplate.exchange(
-                "http://localhost:" + port + "/api/orders/getOrders",
+        ResponseEntity<Order[]> response = restTemplate.exchange(
+                "http://localhost:" + port + "/api/orders/getAll",
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Order>>() {});
-        List<Order> orders = response.getBody();
+                new ParameterizedTypeReference<Order[]>(){});
 
         //assert that response is OK
         assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        assertEquals(2, response.getBody().length);
     }
 
 }

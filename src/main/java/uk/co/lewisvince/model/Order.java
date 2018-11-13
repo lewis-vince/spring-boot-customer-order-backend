@@ -1,33 +1,39 @@
 package uk.co.lewisvince.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Document(collection = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long orderId;
-    private int customerId;
+    private ObjectId id;
+    private Integer customerId;
     private Date orderDate;
-    private List<OrderItem> items;
+//    @JsonProperty
+//    private List<OrderItem> items;
+
+    public Order() {
+//        items = new ArrayList<>();
+    }
 
     public Order(int customerId, Date orderDate, List<OrderItem> items) {
         this.customerId = customerId;
         this.orderDate = orderDate;
-        this.items = items;
+//        this.items = items;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public ObjectId getId() {
+        return id;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public int getCustomerId() {
@@ -46,12 +52,12 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public List<OrderItem> getItems() {
-        return items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
-    }
+//    public List<OrderItem> getItems() {
+//        return items;
+//    }
+//
+//    public void setItems(List<OrderItem> items) {
+//        this.items = items;
+//    }
 
 }
