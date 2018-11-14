@@ -11,7 +11,9 @@ import utils.OrderTestUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,5 +62,21 @@ public class OrderControllerTest {
         assertTrue("Request has returned a value", response.isPresent());
         assertEquals("Returned order is the correct order",
                 testOrder.getId(), response.get().getId());
+    }
+
+    @Test
+    public void addOrderReturnsCorrectOrderResponse() {
+        // create dummy order details
+        String orderId = "5beacfca0c3c140c60a5f402";
+        String customerId = "39";
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(2018, Calendar.JULY, 21, 14, 45, 39);
+        Date orderDate = calendar.getTime();
+        Order testOrder = new Order(orderId, customerId, orderDate, new ArrayList<>());
+
+        when(orderRepository.save(testOrder)).thenReturn(testOrder);
+
+        Order response = orderController.create(testOrder);
+        assertEquals("Add order request returns the same order back", testOrder, response);
     }
 }

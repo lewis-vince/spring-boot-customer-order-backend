@@ -1,5 +1,6 @@
 package uk.co.lewisvince.controller;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,29 +8,51 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import uk.co.lewisvince.model.Order;
+import utils.migration.MongoTestMigrationUtils;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
-public class OrdersControllerIntegrationTest {
+public class OrderControllerIntegrationTest {
 
     @LocalServerPort
     private int port;
 
     @Autowired
     private TestRestTemplate restTemplate;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
+    @Before
+    public void resetMongoDb() {
+        // reset mongodb before each integration test
+        try {
+            MongoTestMigrationUtils.resetMongoDb(mongoTemplate);
+        } catch (IOException e) {
+            fail();
+        }
+    }
 
     @Test
     public void getOrdersReturnsOkWithCorrectOrders() {
@@ -72,11 +95,9 @@ public class OrdersControllerIntegrationTest {
         String requestedOrderId = "5beacfce0c8c140c60c5f402";
         String expectedCustomerId = "1";
 
-        ResponseEntity<Order> response = restTemplate.exchange(
+        ResponseEntity<Order> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/api/orders/get/" + requestedOrderId,
-                HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<Order>() {});
+                Order.class);
 
         assertEquals("Response status is 200 (OK)",
                 HttpStatus.OK, response.getStatusCode());
@@ -90,6 +111,23 @@ public class OrdersControllerIntegrationTest {
 
     @Test
     public void addOrderWithCorrectOrderDetailsAddsTheOrderToTheDb() {
+        // create dummy order details
+        String orderId = "5beacfce0c8c140c60a5f402";
+        String customerId = "34";
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.set(2018, Calendar.MAY, 21, 14, 45, 39);
+        Date orderDate = calendar.getTime();
+        Order testOrder = new Order(orderId, customerId, orderDate, new ArrayList<>());
 
+        ResponseEntity<Order> response = restTemplate.postForEntity(
+                "http://localhost:" + port + "/api/orders/order",
+                new HttpEntity<>(testOrder), Order.class);
+
+        assertEquals("Response status is 200 (OK)",
+                HttpStatus.OK, response.getStatusCode());
+        assertNotNull("Response body is not null", response.getBody());
+
+        assertEquals("Order id matches requested order id",
+                orderId, response.getBody().getId());
     }
 }
