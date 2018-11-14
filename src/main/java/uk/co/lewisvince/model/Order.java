@@ -1,11 +1,9 @@
 package uk.co.lewisvince.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,34 +11,34 @@ import java.util.List;
 public class Order {
     @Id
     private ObjectId id;
-    private Integer customerId;
+    private String customerId;
     private Date orderDate;
-//    @JsonProperty
 //    private List<OrderItem> items;
 
     public Order() {
 //        items = new ArrayList<>();
     }
 
-    public Order(int customerId, Date orderDate, List<OrderItem> items) {
+    public Order(String orderId, String customerId, Date orderDate, List<OrderItem> items) {
+        this.id = new ObjectId(orderId);
         this.customerId = customerId;
         this.orderDate = orderDate;
 //        this.items = items;
     }
 
-    public ObjectId getId() {
-        return id;
+    public String getId() {
+        return id.toHexString();
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
+    public void setOrderId(String orderId) {
+        this.id = new ObjectId(orderId);
     }
 
-    public int getCustomerId() {
+    public String getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(String customerId) {
         this.customerId = customerId;
     }
 
