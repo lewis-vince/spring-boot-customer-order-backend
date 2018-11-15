@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class OrderControllerTest {
 
@@ -78,5 +78,21 @@ public class OrderControllerTest {
 
         Order response = orderController.create(testOrder);
         assertEquals("Add order request returns the same order back", testOrder, response);
+    }
+
+    @Test
+    public void deleteOrderCorrectlyDeletesOrder() {
+        // create dummy order details
+        String orderId = "TESTORDER";
+
+        // mock delete (void) method
+        doNothing().when(orderRepository).deleteById(orderId);
+
+        //call delete method
+        orderController.delete(orderId);
+
+        // verify that the delete method in the repository was called once
+        // with the correct order parameter
+        verify(orderRepository, times(1)).deleteById(orderId);
     }
 }

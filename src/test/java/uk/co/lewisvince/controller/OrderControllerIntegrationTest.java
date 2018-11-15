@@ -9,6 +9,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -113,8 +115,8 @@ public class OrderControllerIntegrationTest {
     @Test
     public void addOrderWithCorrectOrderDetailsAddsTheOrderToTheDb() {
         // create dummy order details
-        String orderId = "ORDER1";
-        String customerId = "34";
+        String orderId = "ORDER8";
+        String customerId = "13";
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(2018, Calendar.MAY, 21, 14, 45, 39);
         Date orderDate = calendar.getTime();
@@ -130,5 +132,36 @@ public class OrderControllerIntegrationTest {
 
         assertEquals("Order id matches requested order id",
                 orderId, response.getBody().getId());
+
+        // query the db to make sure that the new order has been added correctly
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is("ORDER8"));
+        List<Order> dbOrder = mongoTemplate.find(query, Order.class);
+
+        assertEquals("DB contains one matching object", 1, dbOrder.size());
+        assertEquals("Order in DB has correct id", orderId, dbOrder.get(0).getId());
+    }
+
+    @Test
+    public void removeOrderCorrectlyDeletesTheOrderFromTheDb() {
+        String targetOrderId = "ORDER3";
+
+        // run DELETE request
+        ResponseEntity<Order> response = restTemplate.exchange(
+                "http://localhost:" + port + "/api/orders/delete/" + targetOrderId,
+                HttpMethod.DELETE,
+                null,
+                new ParameterizedTypeReference<Order>() {}
+        );
+
+        assertEquals("Response status is 200 (OK)",
+                HttpStatus.OK, response.getStatusCode());
+
+        // query the db to make sure that the new order has been added correctly
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(targetOrderId));
+        List<Order> dbOrder = mongoTemplate.find(query, Order.class);
+
+        assertEquals("DB contains no matching objects", 0, dbOrder.size());
     }
 }

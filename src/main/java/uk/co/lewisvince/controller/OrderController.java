@@ -43,4 +43,9 @@ public class OrderController {
     public Order create(@RequestBody Order order) {
         return orderRepository.save(order);
     }
+
+    @RequestMapping(value = "delete/{orderId}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable String orderId) {
+        orderRepository.deleteById(orderId);
+    }
 }
