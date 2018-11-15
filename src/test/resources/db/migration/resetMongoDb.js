@@ -8,22 +8,19 @@ orderCollection.remove({});
 orderCollection.insertMany(
     [
         {
-            _id: "5bec3a870c8c140c60c5f405",
-            customerId: 45,
-            orderDate: "2018-11-11 14:42:14.000",
-            items: []
+            _id: "ORDER1",
+            customerId: "45",
+            orderDate: new Date("2018-11-11T14:42:14")
         },
         {
-            _id: "5bec3a870c8c140c60c5f406",
-            customerId: 32,
-            orderDate: "2018-11-01 21:22:45.000",
-            items: []
+            _id: "ORDER2",
+            customerId: "32",
+            orderDate: new Date("2018-11-01T21:22:45")
         },
         {
-            _id: "5bec3a870c8c140c60c5f407",
-            customerId: 45,
-            orderDate: "2017-05-23 08:00:45.000",
-            items: []
+            _id: "ORDER3",
+            customerId: "49",
+            orderDate: new Date("2017-05-23T08:00:45")
         }
     ]
 );

@@ -55,7 +55,7 @@ public class OrderControllerTest {
     @Test
     public void getOrderByOrderIdReturnsCorrectOrder() {
         String orderId = "5beacfce0c8c140c60c5f402";
-        Order testOrder = new Order(orderId, "3", new Date(), new ArrayList<>());
+        Order testOrder = new Order(orderId, "3", new Date());
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(testOrder));
 
         Optional<Order> response = orderController.get(orderId);
@@ -72,7 +72,7 @@ public class OrderControllerTest {
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(2018, Calendar.JULY, 21, 14, 45, 39);
         Date orderDate = calendar.getTime();
-        Order testOrder = new Order(orderId, customerId, orderDate, new ArrayList<>());
+        Order testOrder = new Order(orderId, customerId, orderDate);
 
         when(orderRepository.save(testOrder)).thenReturn(testOrder);
 

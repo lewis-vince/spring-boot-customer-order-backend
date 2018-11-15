@@ -72,8 +72,9 @@ public class OrderControllerIntegrationTest {
 
     @Test
     public void getOrderWithCustomerIdReturnsAllMatchingOrders() {
+        String requestedCustomerId = "45";
         ResponseEntity<List<Order>> response = restTemplate.exchange(
-                "http://localhost:" + port + "/api/orders/getByCustomer/3",
+                "http://localhost:" + port + "/api/orders/getByCustomer/" + requestedCustomerId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Order>>() {});
@@ -87,13 +88,13 @@ public class OrderControllerIntegrationTest {
         assertEquals("Number of retrieved orders is correct",
                 1, response.getBody().size());
         assertEquals("Customer id in the retrieved orders matches",
-                "3", response.getBody().get(0).getCustomerId());
+                requestedCustomerId, response.getBody().get(0).getCustomerId());
     }
 
     @Test
     public void getOrderByIdReturnsTheCorrectOrder() {
-        String requestedOrderId = "5beacfce0c8c140c60c5f402";
-        String expectedCustomerId = "1";
+        String requestedOrderId = "ORDER2";
+        String expectedCustomerId = "32";
 
         ResponseEntity<Order> response = restTemplate.getForEntity(
                 "http://localhost:" + port + "/api/orders/get/" + requestedOrderId,
@@ -112,12 +113,12 @@ public class OrderControllerIntegrationTest {
     @Test
     public void addOrderWithCorrectOrderDetailsAddsTheOrderToTheDb() {
         // create dummy order details
-        String orderId = "5beacfce0c8c140c60a5f402";
+        String orderId = "ORDER1";
         String customerId = "34";
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(2018, Calendar.MAY, 21, 14, 45, 39);
         Date orderDate = calendar.getTime();
-        Order testOrder = new Order(orderId, customerId, orderDate, new ArrayList<>());
+        Order testOrder = new Order(orderId, customerId, orderDate);
 
         ResponseEntity<Order> response = restTemplate.postForEntity(
                 "http://localhost:" + port + "/api/orders/order",
