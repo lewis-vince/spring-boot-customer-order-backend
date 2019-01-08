@@ -1,6 +1,6 @@
 package utils;
 
-import uk.co.lewisvince.model.Customer;
+import uk.co.lewisvince.customerservice.model.Customer;
 
 import java.util.Arrays;
 import java.util.List;

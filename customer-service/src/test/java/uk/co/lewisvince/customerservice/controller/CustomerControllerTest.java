@@ -1,12 +1,12 @@
-package uk.co.lewisvince.controller;
+package uk.co.lewisvince.customerservice.controller;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.co.lewisvince.model.Customer;
-import uk.co.lewisvince.repository.CustomerRepository;
+import uk.co.lewisvince.customerservice.model.Customer;
+import uk.co.lewisvince.customerservice.repository.CustomerRepository;
 import utils.CustomerTestUtils;
 
 import java.util.List;

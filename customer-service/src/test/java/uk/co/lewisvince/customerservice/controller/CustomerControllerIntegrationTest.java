@@ -1,5 +1,6 @@
-package uk.co.lewisvince.controller;
+package uk.co.lewisvince.customerservice.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.co.lewisvince.model.Customer;
-import uk.co.lewisvince.model.Order;
+import uk.co.lewisvince.customerservice.model.Customer;
 import utils.migration.MongoTestMigrationUtils;
 
 import java.io.IOException;
@@ -65,6 +65,6 @@ public class CustomerControllerIntegrationTest {
         assertEquals(3, response.getBody().length);
 
         // check fields in response customers
-        assertEquals("HEIN_000003", response.getBody()[2].getId());
+        Assert.assertEquals("HEIN_000003", response.getBody()[2].getId());
     }
 }
