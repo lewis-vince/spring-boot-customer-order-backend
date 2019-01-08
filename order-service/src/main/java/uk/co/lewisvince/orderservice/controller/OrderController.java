@@ -1,4 +1,4 @@
-package uk.co.lewisvince.controller;
+package uk.co.lewisvince.orderservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import uk.co.lewisvince.model.Order;
-import uk.co.lewisvince.repository.OrderRepository;
+import uk.co.lewisvince.orderservice.model.Order;
+import uk.co.lewisvince.orderservice.repository.OrderRepository;
 
 import java.util.List;
 import java.util.Optional;

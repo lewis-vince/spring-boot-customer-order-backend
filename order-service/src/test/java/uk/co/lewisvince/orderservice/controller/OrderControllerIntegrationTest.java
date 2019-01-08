@@ -1,5 +1,6 @@
-package uk.co.lewisvince.controller;
+package uk.co.lewisvince.orderservice.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,11 +18,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import uk.co.lewisvince.model.Order;
+import org.springframework.test.context.junit4.SpringRunner;
+import uk.co.lewisvince.orderservice.model.Order;
 import utils.migration.MongoTestMigrationUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class OrderControllerIntegrationTest {
@@ -89,7 +90,7 @@ public class OrderControllerIntegrationTest {
 
         assertEquals("Number of retrieved orders is correct",
                 1, response.getBody().size());
-        assertEquals("Customer id in the retrieved orders matches",
+        Assert.assertEquals("Customer id in the retrieved orders matches",
                 requestedCustomerId, response.getBody().get(0).getCustomerId());
     }
 
@@ -106,9 +107,9 @@ public class OrderControllerIntegrationTest {
                 HttpStatus.OK, response.getStatusCode());
         assertNotNull("Response body is not null", response.getBody());
 
-        assertEquals("Retrieved order has matching id to request",
+        Assert.assertEquals("Retrieved order has matching id to request",
                 requestedOrderId, response.getBody().getId());
-        assertEquals("Retrieved order has correct customer",
+        Assert.assertEquals("Retrieved order has correct customer",
                 expectedCustomerId, response.getBody().getCustomerId());
     }
 
@@ -130,7 +131,7 @@ public class OrderControllerIntegrationTest {
                 HttpStatus.OK, response.getStatusCode());
         assertNotNull("Response body is not null", response.getBody());
 
-        assertEquals("Order id matches requested order id",
+        Assert.assertEquals("Order id matches requested order id",
                 orderId, response.getBody().getId());
 
         // query the db to make sure that the new order has been added correctly
@@ -139,7 +140,7 @@ public class OrderControllerIntegrationTest {
         List<Order> dbOrder = mongoTemplate.find(query, Order.class);
 
         assertEquals("DB contains one matching object", 1, dbOrder.size());
-        assertEquals("Order in DB has correct id", orderId, dbOrder.get(0).getId());
+        Assert.assertEquals("Order in DB has correct id", orderId, dbOrder.get(0).getId());
     }
 
     @Test

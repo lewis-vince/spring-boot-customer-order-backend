@@ -1,8 +1,9 @@
 package utils;
 
-import uk.co.lewisvince.model.Order;
 
-import java.util.ArrayList;
+
+import uk.co.lewisvince.orderservice.model.Order;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;

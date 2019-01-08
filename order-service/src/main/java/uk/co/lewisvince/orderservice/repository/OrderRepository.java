@@ -1,7 +1,7 @@
-package uk.co.lewisvince.repository;
+package uk.co.lewisvince.orderservice.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import uk.co.lewisvince.model.Order;
+import uk.co.lewisvince.orderservice.model.Order;
 
 import java.util.List;
 

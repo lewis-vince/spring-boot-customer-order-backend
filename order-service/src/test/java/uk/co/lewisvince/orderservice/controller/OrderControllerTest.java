@@ -1,12 +1,13 @@
-package uk.co.lewisvince.controller;
+package uk.co.lewisvince.orderservice.controller;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.co.lewisvince.model.Order;
-import uk.co.lewisvince.repository.OrderRepository;
+import uk.co.lewisvince.orderservice.model.Order;
+import uk.co.lewisvince.orderservice.repository.OrderRepository;
 import utils.OrderTestUtils;
 
 
@@ -55,7 +56,7 @@ public class OrderControllerTest {
 
         Optional<Order> response = orderController.get(orderId);
         assertTrue("Request has returned a value", response.isPresent());
-        assertEquals("Returned order is the correct order",
+        Assert.assertEquals("Returned order is the correct order",
                 testOrder.getId(), response.get().getId());
     }
 
@@ -72,7 +73,7 @@ public class OrderControllerTest {
         when(orderRepository.save(testOrder)).thenReturn(testOrder);
 
         Order response = orderController.create(testOrder);
-        assertEquals("Add order request returns the same order back", testOrder, response);
+        Assert.assertEquals("Add order request returns the same order back", testOrder, response);
     }
 
     @Test
